@@ -1,7 +1,14 @@
 import express from "express";
+import client from "./db-client.js";
+import UserRouter from "./routes/users.js";
+import TaskRtouer from "./routes/tasks.js";
+
 const app = express();
 const port = process.env.PORT || 1200;
-import client from "./db-client.js";
+
+app.use(express.json());
+app.use("/users", UserRouter);
+app.use("/tasks", TaskRtouer);
 
 app.get("/", async (req, res) => {
   let conn;

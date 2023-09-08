@@ -1,0 +1,25 @@
+GET http://localhost:1200
+
+###
+GET http://localhost:1200/users
+
+###
+POST http://localhost:1200/users
+Content-Type: application/json
+
+{
+    "username": "John Doe"
+}
+
+###
+GET http://localhost:1200/tasks
+
+###
+POST http://localhost:1200/tasks
+Content-Type: application/json
+
+{
+    "title": "Task 1",
+    "description": "Description 1",
+    "user": 2
+}
