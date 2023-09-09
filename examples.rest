@@ -1,9 +1,22 @@
 GET http://localhost:1200
 
-###
+### all users
 GET http://localhost:1200/users
 
-###
+### login with username
+POST http://localhost:1200/login
+Content-Type: application/json
+
+{
+    "username": "John Doe"
+}
+
+### get user by username
+GET http://localhost:1200/users/John%20Doe
+
+### get user by id
+
+### create user
 POST http://localhost:1200/users
 Content-Type: application/json
 
