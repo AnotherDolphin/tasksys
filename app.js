@@ -18,13 +18,10 @@ app.get("/", async (req, res) => {
   try {
     conn = await client.connect();
     console.log("Connected to PostgreSQL");
-
     const result = await conn.query("SELECT * FROM users");
     console.log("Result:", result.rows);
-
-    res.send("Hello World!");
+    res.send("Hello Tasksys dudes!");
   } catch (err) {
-    console.error("Error executing query", err.stack);
     res.status(500).send("Internal Server Error");
   } finally {
     if (conn) {

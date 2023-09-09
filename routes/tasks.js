@@ -44,9 +44,7 @@ router.put("/:id/status", async (req, res) => {
     const updatedTask = await store.updateStatus(id, status, user);
     res.send(updatedTask);
   } catch (error) {
-    console.log(error);
-
-    res.status(422).send(error.detail || message);
+    res.status(422).send(error.detail || error.message);
   }
 });
 

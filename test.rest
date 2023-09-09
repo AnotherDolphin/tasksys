@@ -29,7 +29,7 @@ PUT http://localhost:1200/tasks/3/status
 Content-Type: application/json
 
 {
-    "status": "Blocked",
+    "status": "Done",
     "user": 2
 }
 
@@ -40,5 +40,5 @@ Content-Type: application/json
 
 {
     "user": 2,
-    "newUser": 3
+    "newUser": 2
 }

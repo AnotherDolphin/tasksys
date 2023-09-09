@@ -1,5 +1,11 @@
 import client from "../db-client.js";
 
+class CustomError extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.statusCode = statusCode;
+  }
+}
 class TaskStore {
   async getAll() {
     try {
@@ -50,6 +56,9 @@ class TaskStore {
       ]);
       const task = find.rows[0];
       if (!task) throw new Error(`Cannot find task with id ${taskId}`);
+      if (task.status === newStatus) {
+        throw new CustomError(`Task is already ${newStatus}`, 422);
+      }
 
       // Update task status and updated_by fields
       const updateTaskSql =
@@ -98,10 +107,16 @@ class TaskStore {
       const taskResult = await conn.query(taskQuery, [taskId]);
       const task = taskResult.rows[0];
       if (!task) throw new Error(`Cannot find task with id ${taskId}`);
+      if (task.assigned_to === newUserId) {
+        throw new CustomError(
+          `Task is already assigned to user with id ${newUserId}`,
+          422
+        );
+      }
 
       // Update task assigned_to and updated_by fields
       const updateTaskSql =
-        "UPDATE tasks SET status = $1, updated_by = $2 WHERE id = $3 RETURNING *";
+        "UPDATE tasks SET assigned_to = $1, updated_by = $2 WHERE id = $3 RETURNING *";
       const updateTask = await conn.query(updateTaskSql, [
         newUserId,
         userId,
@@ -127,7 +142,7 @@ class TaskStore {
         taskId,
       ]);
       await conn.query("COMMIT");
-      return updatedTask
+      return updatedTask;
     } catch (error) {
       await conn.query("ROLLBACK");
       throw error;
