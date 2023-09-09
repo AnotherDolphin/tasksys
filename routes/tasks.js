@@ -31,9 +31,13 @@ router.post("/", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
-  const { id } = req.params;
-  await store.delete(id);
-  res.send("Task deleted");
+  try {
+    const { id } = req.params;
+    await store.delete(id);
+    res.send("Task deleted");
+  } catch (error) {
+    res.status(error.statusCode?? 422).send(error.message)
+  }
 });
 
 router.put("/:id/status", async (req, res) => {
@@ -44,7 +48,8 @@ router.put("/:id/status", async (req, res) => {
     const updatedTask = await store.updateStatus(id, status, user);
     res.send(updatedTask);
   } catch (error) {
-    res.status(422).send(error.detail || error.message);
+    console.error(error);
+    res.status(error.statusCode?? 422).send(error.detail || error.message);
   }
 });
 
@@ -58,7 +63,7 @@ router.put("/:id/assign", async (req, res) => {
     res.send(updatedTask);
   } catch (error) {
     console.error(error);
-    res.status(422).send(error.detail || error.message);
+    res.status(error.statusCode?? 422).send(error.detail || error.message);
   }
 });
 

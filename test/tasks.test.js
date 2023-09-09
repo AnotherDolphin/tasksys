@@ -49,5 +49,10 @@ describe("Task API", () => {
     });
   });
 
-  
+  describe("Delete Task", () => {
+    it("should delete a task", async () => {
+      const res = await request(app).delete(`/tasks/${testTask.id}`);
+      expect(res.statusCode).toEqual(200);
+    });
+  });
 });

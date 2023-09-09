@@ -154,6 +154,40 @@ class TaskStore {
   async delete(id) {
     try {
       const conn = await client.connect();
+      
+      //check if exists
+      const checkSql = "SELECT * FROM tasks WHERE id=$1";
+      const checkResult = await conn.query(checkSql, [id]);
+      const task = checkResult.rows[0];
+      if (!task) throw new CustomError(`Cannot find task with id ${id}`, 404);
+
+      
+      // delete all changes, and associateed reassignments & status_updates
+      const deleteChangesSql =
+        "DELETE FROM changes WHERE task_id=$1 RETURNING *";
+      const deleteChangesResult = await conn.query(deleteChangesSql, [id]);
+      const changes = deleteChangesResult.rows;
+
+      for (let change of changes) {
+        if (change.reassignment_id) {
+          const deleteReassignmentsSql =
+            "DELETE FROM reassignments WHERE id=$1 RETURNING *";
+          const deleteReassignmentsResult = await conn.query(
+            deleteReassignmentsSql,
+            [change.reassignment_id]
+          );
+          const reassignment = deleteReassignmentsResult.rows[0];
+        } else if (change.status_update_id) {
+          const deleteStatusUpdatesSql =
+            "DELETE FROM status_updates WHERE id=$1 RETURNING *";
+          const deleteStatusUpdatesResult = await conn.query(
+            deleteStatusUpdatesSql,
+            [change.status_update_id]
+          );
+        }
+      }
+
+      // delete the task
       const sql = "DELETE FROM tasks WHERE id=$1";
       const result = await conn.query(sql, [id]);
       conn.release();

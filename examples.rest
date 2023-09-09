@@ -24,6 +24,10 @@ Content-Type: application/json
     "user": 2
 }
 
+### delete task
+DELETE http://localhost:1200/tasks/2
+
+
 ### update task status
 PUT http://localhost:1200/tasks/3/status
 Content-Type: application/json
