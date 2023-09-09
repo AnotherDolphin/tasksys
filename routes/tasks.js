@@ -37,6 +37,18 @@ router.put("/:id/status", async (req, res) => {
   }
 });
 
-
+router.put("/:id/assign", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { user, newUser } = req.body;
+    if (!user) return res.status(400).send("user is required");
+    if (!newUser) return res.status(400).send("newUser is required");
+    const updatedTask = await store.reassignTask(id, user, newUser);
+    res.status(201).send(updatedTask);
+  } catch (error) {
+    console.error(error);
+    res.status(422).send(error.detail || error.message);
+  }
+});
 
 export default router;

@@ -76,7 +76,44 @@ class TaskStore {
     }
   }
 
+  reassignTask = async (taskId, userId, newUserId) => {
+    const conn = await client.connect();
+    try {
+      await conn.query("BEGIN");
 
+      // const taskQuery = "SELECT * FROM tasks WHERE id = $1";
+      // const taskResult = await conn.query(taskQuery, [taskId]);
+      // const task = taskResult.rows[0];
+      // if (!task) throw new Error(`Cannot find task with id ${taskId}`);
+
+      const updateTaskQuery = "UPDATE tasks SET assigned_to = $1 WHERE id = $2 RETURNING *";
+      const updateTask = await conn.query(updateTaskQuery, [newUserId, taskId]);
+      const updatedTask = updateTask.rows[0];
+
+      const reassignmentQuery =
+        "INSERT INTO reassignments(assigned_by, assigned_to) VALUES($1, $2) RETURNING *";
+      const reassignmentResult = await conn.query(reassignmentQuery, [
+        userId,
+        newUserId,
+      ]);
+      const reassignmentId = reassignmentResult.rows[0].id;
+
+      const changeQuery =
+        "INSERT INTO changes(reassignment_id, user_id, task_id) VALUES($1, $2, $3) RETURNING *";
+      const change = await conn.query(changeQuery, [
+        reassignmentId,
+        userId,
+        taskId,
+      ]);
+      await conn.query("COMMIT");
+      return updatedTask
+    } catch (error) {
+      await conn.query("ROLLBACK");
+      throw error;
+    } finally {
+      conn.release();
+    }
+  };
 
   async delete(id) {
     try {
