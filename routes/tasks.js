@@ -9,13 +9,25 @@ router.get("/", async (req, res) => {
   res.send(tasks);
 });
 
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  const task = await store.getById(id);
+  if (!task) return res.status(404).send("Task not found");
+  res.send(task);
+});
+
 router.post("/", async (req, res) => {
-  const { title, description, user } = req.body;
-  if (!title) return res.status(400).send("title is required");
-  if (!description) return res.status(400).send("description is required");
-  if (!user) return res.status(400).send("user is required");
-  const newTask = await store.add(title, description, user);
-  res.send(newTask);
+  try {
+    const { title, description, user } = req.body;
+    if (!title) return res.status(400).send("title is required");
+    if (!description) return res.status(400).send("description is required");
+    if (!user) return res.status(400).send("user is required");
+    const newTask = await store.add(title, description, user);
+    res.status(201).send(newTask);
+  } catch (error) {
+    console.error(error);
+    res.status(422).send(error.detail || error.message);
+  }
 });
 
 router.delete("/:id", async (req, res) => {
@@ -32,8 +44,9 @@ router.put("/:id/status", async (req, res) => {
     const updatedTask = await store.updateStatus(id, status, user);
     res.send(updatedTask);
   } catch (error) {
-    console.error(error);
-    res.status(422).send(error.message);
+    console.log(error);
+
+    res.status(422).send(error.detail || message);
   }
 });
 
@@ -44,7 +57,7 @@ router.put("/:id/assign", async (req, res) => {
     if (!user) return res.status(400).send("user is required");
     if (!newUser) return res.status(400).send("newUser is required");
     const updatedTask = await store.reassignTask(id, user, newUser);
-    res.status(201).send(updatedTask);
+    res.send(updatedTask);
   } catch (error) {
     console.error(error);
     res.status(422).send(error.detail || error.message);
