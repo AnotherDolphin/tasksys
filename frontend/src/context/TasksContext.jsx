@@ -36,6 +36,7 @@ export const TasksProvider = ({ children }) => {
       });
       const data = await response.json();
       fetchTasks();
+      alert("Task created!");
     } catch (error) {
       console.error(error);
     }
@@ -62,6 +63,7 @@ export const TasksProvider = ({ children }) => {
       );
       const data = await response.json();
       fetchTasks();
+      // alert("Status updated!");
     } catch (error) {
       console.error(error);
     }
@@ -84,6 +86,7 @@ export const TasksProvider = ({ children }) => {
       );
       const data = await response.json();
       fetchTasks();
+      // alert("Task reassigned!");
     } catch (error) {
       console.error(error);
     }

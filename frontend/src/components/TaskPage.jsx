@@ -31,6 +31,9 @@ function TaskPage() {
     event.preventDefault();
   };
 
+  const isAuthorized =
+    loggedInUser.id === task.assigned_to || loggedInUser.id === task.created_by;
+
   return (
     <div>
       <div className="tasklist align" style={{ height: "100%" }}>
@@ -49,7 +52,8 @@ function TaskPage() {
             id={task.id}
             name={task.title}
             assigned_to={
-              users.find((user) => user.id === task.assigned_to)?.username ?? "Unassigned"
+              users.find((user) => user.id === task.assigned_to)?.username ??
+              "Unassigned"
             }
             status={task.status}
             created_by={task.created_by}
@@ -66,6 +70,7 @@ function TaskPage() {
           <label>
             Status&nbsp;&nbsp;&nbsp;&nbsp;
             <select
+              disabled={!isAuthorized}
               value={task.status}
               onChange={(event) =>
                 updateStatus(loggedInUser.id, task.id, event.target.value)
@@ -81,6 +86,7 @@ function TaskPage() {
           <label>
             Assigned To:&nbsp;&nbsp;&nbsp;&nbsp;
             <select
+              disabled={!isAuthorized}
               value={task.assigned_to}
               onChange={(event) => {
                 reassginTask(loggedInUser.id, task.id, event.target.value);
@@ -93,6 +99,23 @@ function TaskPage() {
               ))}
             </select>
           </label>
+          <div style={{ display: "flex", flex: 1, alignItems: "center" }}>
+            {isAuthorized ? (
+              <p>
+                <strong>Editing enabled</strong>
+                <br />
+                As this task's
+                {loggedInUser.id === task.assigned_to ? "assignee" : "creator"},
+                you can change the status and assignment
+              </p>
+            ) : (
+              <p>
+                <strong>Editing disabled</strong>
+                <br />
+                Only the assignee or creator of this task can change the status/assignment
+              </p>
+            )}
+          </div>
         </form>
         <TaskHistory users={users} task={task} />
       </div>

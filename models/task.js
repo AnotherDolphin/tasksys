@@ -60,6 +60,13 @@ class TaskStore {
         throw new CustomError(`Task is already ${newStatus}`, 422);
       }
 
+      if (task.created_by !== userId && task.assigned_to !== userId) {
+        throw new CustomError(
+          `Not Permitted: Must be creator or assignee of the task to update its status`,
+          401
+        );
+      }
+
       // Update task status and updated_by fields
       const updateTaskSql =
         "UPDATE tasks SET status = $1, updated_by = $2 WHERE id = $3 RETURNING *";
@@ -114,6 +121,13 @@ class TaskStore {
         );
       }
 
+      if (task.created_by !== userId && task.assigned_to !== userId) {
+        throw new CustomError(
+          `Not Permitted: Must be creator or assignee of the task to reassign it`,
+          401
+        );
+      }
+
       // Update task assigned_to and updated_by fields
       const updateTaskSql =
         "UPDATE tasks SET assigned_to = $1, updated_by = $2 WHERE id = $3 RETURNING *";
@@ -156,7 +170,7 @@ class TaskStore {
     try {
       const conn = await client.connect();
       const sql =
-      // "select * from changes where task_id = $1 order by created_at desc";
+        // "select * from changes where task_id = $1 order by created_at desc";
         "SELECT changes.id, changes.task_id, changes.user_id, changes.reassignment_id, changes.status_update_id, changes.created_at, reassignments.assigned_by, reassignments.assigned_to, status_updates.from_status, status_updates.to_status FROM changes LEFT JOIN reassignments ON changes.reassignment_id = reassignments.id LEFT JOIN status_updates ON changes.status_update_id = status_updates.id WHERE changes.task_id = $1 ORDER BY changes.created_at DESC";
       const result = await conn.query(sql, [taskId]);
       conn.release();
@@ -166,19 +180,17 @@ class TaskStore {
       throw err;
     }
   }
-    
 
   async delete(id) {
     try {
       const conn = await client.connect();
-      
+
       //check if exists
       const checkSql = "SELECT * FROM tasks WHERE id=$1";
       const checkResult = await conn.query(checkSql, [id]);
       const task = checkResult.rows[0];
       if (!task) throw new CustomError(`Cannot find task with id ${id}`, 404);
 
-      
       // delete all changes, and associateed reassignments & status_updates
       const deleteChangesSql =
         "DELETE FROM changes WHERE task_id=$1 RETURNING *";
