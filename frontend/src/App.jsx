@@ -1,5 +1,5 @@
 import LoginWrapper from "./components/LoginWrapper";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import TaskPage from "./components/TaskPage";
 import { UserProvider } from "./context/UserContext";
 import { TasksProvider } from "./context/TasksContext";
@@ -12,6 +12,10 @@ const router = createBrowserRouter([
   {
     path: "/tasks/:id",
     element: <TaskPage />,
+  },
+  {
+    path: "*",
+    element: <Navigate replace to={'/'} />,
   },
 ]);
 

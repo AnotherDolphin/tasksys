@@ -4,6 +4,7 @@ export const UserContext = createContext({
   users: [],
   loggedInUser: null,
   login: () => {},
+  logout: () => {},
 });
 
 export function UserProvider({ children }) {
@@ -41,6 +42,13 @@ export function UserProvider({ children }) {
     }
   };
 
+  const logout = () => {
+    setLoggedInUser(null);
+    localStorage.removeItem("loggedInUser");
+    // return home
+    window.location.href = "/";
+  };
+
   useEffect(() => {
     getAllUsers();
   }, []);
@@ -56,6 +64,7 @@ export function UserProvider({ children }) {
         users,
         loggedInUser,
         login,
+        logout,
       }}
     >
       {children}

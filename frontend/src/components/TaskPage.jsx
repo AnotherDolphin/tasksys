@@ -4,6 +4,8 @@ import { useContext, useEffect, useState } from "react";
 import Task from "./TaskItem";
 import TaskHistory from "./TaskHistory";
 import withHeader from "../hoc/withHeader";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 const statusOptions = [
   "ToDo",
@@ -31,16 +33,29 @@ function TaskPage() {
 
   return (
     <div>
-      <div className="tasklist align" style={{height: '100%'}}>
-        <Task
-          key={task.id}
-          id={task.id}
-          name={task.title}
-          assigned_to={task.user}
-          status={task.status}
-          created_by={task.created_by}
-          created_at={task.created_at}
-        />
+      <div className="tasklist align" style={{ height: "100%" }}>
+        <div>
+          <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+            <FontAwesomeIcon
+              cursor={"pointer"}
+              icon={faArrowLeft}
+              size="xl"
+              onClick={() => (window.location.href = "/")}
+            />
+            <h3>Task</h3>
+          </div>
+          <Task
+            key={task.id}
+            id={task.id}
+            name={task.title}
+            assigned_to={
+              users.find((user) => user.id === task.assigned_to)?.username ?? "Unassigned"
+            }
+            status={task.status}
+            created_by={task.created_by}
+            created_at={task.created_at}
+          />
+        </div>
         <form
           style={{ display: "flex", flexDirection: "column", gap: 10 }}
           onSubmit={(e) => {

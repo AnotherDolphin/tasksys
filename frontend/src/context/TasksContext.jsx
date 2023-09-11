@@ -2,8 +2,8 @@ import React, { createContext, useState, useEffect } from "react";
 
 export const TasksContext = createContext({
   tasks: [],
-  addTask: () => {},
   removeTask: () => {},
+  postTask: (userId, title, description) => {},
   updateStatus: (userId, taskId, newStatus) => {},
   reassginTask: (userId, taskId, newUserId) => {},
 });
@@ -25,8 +25,20 @@ export const TasksProvider = ({ children }) => {
     fetchTasks();
   }, []);
 
-  const addTask = (task) => {
-    setTasks([...tasks, task]);
+  const postTask = async (userId, title, description) => {
+    try {
+      const response = await fetch("http://localhost:1200/tasks", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title, description, user: userId }),
+      });
+      const data = await response.json();
+      fetchTasks();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const removeTask = (taskId) => {
@@ -71,7 +83,6 @@ export const TasksProvider = ({ children }) => {
         }
       );
       const data = await response.json();
-      // setTasks(tasks.map((task) => (task.id === taskId.id ? taskId : task)));
       fetchTasks();
     } catch (error) {
       console.error(error);
@@ -80,7 +91,13 @@ export const TasksProvider = ({ children }) => {
 
   return (
     <TasksContext.Provider
-      value={{ tasks, addTask, removeTask, updateStatus, reassginTask }}
+      value={{
+        tasks,
+        postTask,
+        removeTask,
+        updateStatus,
+        reassginTask,
+      }}
     >
       {children}
     </TasksContext.Provider>

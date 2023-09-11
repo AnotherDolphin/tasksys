@@ -4,7 +4,7 @@ import { UserContext } from "../context/UserContext";
 function Task({ id, name, status, assigned_to, created_by, created_at }) {
   const { loggedInUser, users } = useContext(UserContext);
   
-  if (!users || !loggedInUser) return null;
+  if (users.length == 0 || !loggedInUser) return null;
 
   return (
     <div className="task">

@@ -7,7 +7,15 @@ export default function UserSelector() {
 
   return (
     <div className="login-wrapper">
-      <div style={{ display: "flex", gap: "1rem" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          marginBottom: 24,
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
+      >
         {users.map((user) => {
           return (
             <button key={user.id} onClick={() => login(user.username)}>
@@ -16,14 +24,15 @@ export default function UserSelector() {
           );
         })}
       </div>
-      Or register a new user:
+      Or enter your username:
       <form
+        style={{ display: "flex", flexDirection: "column", gap: 10 }}
         onSubmit={(e) => {
           e.preventDefault();
           login(username);
         }}
       >
-        <label>
+        <label style={{ alignSelf: "center" }}>
           Username:
           <input
             type="text"
@@ -31,7 +40,10 @@ export default function UserSelector() {
             onChange={(event) => setUsername(event.target.value)}
           />
         </label>
-        <button type="submit">Register</button>
+        <button type="submit">Login</button>
+        <p style={{ opacity: 0.7 }}>
+          entering a new username will create a user account
+        </p>
       </form>
     </div>
   );

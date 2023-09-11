@@ -1,0 +1,200 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root > div {
+  height: 100%;
+  flex: 1
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+  margin-block: 0.5em;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f1f1f1;
+  }
+}
+
+.align {
+  width: 98vw;
+  margin: auto;
+  padding-inline: 5%;
+  padding-block: 2%;
+  box-sizing: border-box;
+}
+
+.login-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  width: 100vw;
+  margin: auto;
+  padding: 10%;
+  box-sizing: border-box;
+}
+
+.tasklist {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  /* grid-gap: 1rem; */
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin: auto;
+}
+
+.task {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  /* align-items: center; */
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: lightcyan;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  transition: all 0.25s;
+  cursor: pointer;
+}
+
+.task:hover {
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+  scale: 1.05;
+}
+
+.task-history {
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.task-history p {
+  margin: 0.5rem 0;
+  flex: 1;
+}
+
+.task-history > div {
+  background: #f1f1f1;
+  padding: 0 5px;
+  border-radius: 5px;
+  max-height: 0;
+  transform: translateX(-100%);
+  animation: slide-in 0.5s forwards;
+}
+
+@keyframes slide-in {
+  to {
+    transform: translateX(0);
+    max-height: 200px;
+  }
+}
+
+select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+select:focus {
+  outline: none;
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.add-button {
+  position: fixed;
+  bottom: 45px;
+  right: 45px;
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background-color: rgb(32, 32, 154);
+  /* color: #fff; */
+  /* font-size: 24px; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s ease-in-out;
+  transform: scale(1.5);
+} 
+
+.add-button:hover {
+  transform: scale(1.8);
+}
