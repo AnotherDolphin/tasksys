@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import Task from "./TaskItem";
 import { TasksContext } from "../context/TasksContext";
+import { UserContext } from "../context/UserContext";
 import withHeader from "../hoc/withHeader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TaskForm from "./TaskForm";
@@ -10,6 +11,7 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 function TaskList() {
   const { tasks } = useContext(TasksContext);
+  const { users } = useContext(UserContext);
   const [showForm, setShowForm] = useState(false);
   const orderedTasks = tasks.sort((a, b) => {
     return new Date(b.created_at) - new Date(a.created_at);
@@ -32,7 +34,10 @@ function TaskList() {
               key={task.id}
               id={task.id}
               name={task.title}
-              assigned_to={task.user}
+              assigned_to={
+                users.find((user) => user.id === task.assigned_to)?.username ??
+                "Unassigned"
+              }
               status={task.status}
               created_by={task.created_by}
               created_at={task.created_at}

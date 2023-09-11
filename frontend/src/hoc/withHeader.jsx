@@ -1,9 +1,19 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function withHeader(WrappedComponent, headerText) {
   return function WithHeader(props) {
     const { loggedInUser, logout } = useContext(UserContext);
+    const navigate = useNavigate();
+    console.log("no user");
+    useEffect(() => {
+      if (!loggedInUser) {
+        alert("You must be logged in to view this page");
+        navigate("/");
+      }
+    }, []);
+    if (!loggedInUser) return null;
 
     return (
       <>
@@ -21,7 +31,14 @@ function withHeader(WrappedComponent, headerText) {
           <p style={{ fontSize: "1.5rem" }}>
             Welcome, {loggedInUser.username}!
           </p>
-          <button onClick={logout}>Logout</button>
+          <button
+            onClick={() => {
+              navigate("/");
+              logout();
+            }}
+          >
+            Logout
+          </button>
         </header>
         <WrappedComponent {...props} />
       </>

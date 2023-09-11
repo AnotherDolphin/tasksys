@@ -20,6 +20,14 @@ describe("Task API", () => {
     });
   });
 
+  describe("Get All Tasks", () => {
+    it("should return an array of tasks", async () => {
+      const res = await request(app).get("/tasks");
+      expect(res.statusCode).toEqual(200);
+      expect(Array.isArray(res.body)).toBe(true);
+    });
+  });
+
   describe("Update Task Status", () => {
     it("should update a task status", async () => {
       const res = await request(app).put(`/tasks/${testTask.id}/status`).send({
@@ -49,6 +57,14 @@ describe("Task API", () => {
         newUser: 2,
       });
       expect(res.statusCode).toEqual(422);
+    });
+  });
+
+  describe("Get Task by ID", () => {
+    it("should return a task", async () => {
+      const res = await request(app).get(`/tasks/${testTask.id}`);
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.title).toEqual("Test task");
     });
   });
 

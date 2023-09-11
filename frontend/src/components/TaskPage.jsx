@@ -92,11 +92,15 @@ function TaskPage() {
                 reassginTask(loggedInUser.id, task.id, event.target.value);
               }}
             >
+              <option value="" disabled selected>
+                Select a user
+              </option>
               {users.map((user) => (
                 <option key={user.id} value={user.id}>
                   {user.username}
                 </option>
               ))}
+              
             </select>
           </label>
           <div style={{ display: "flex", flex: 1, alignItems: "center" }}>
@@ -112,7 +116,8 @@ function TaskPage() {
               <p>
                 <strong>Editing disabled</strong>
                 <br />
-                Only the assignee or creator of this task can change the status/assignment
+                Only the assignee or creator of this task can change the
+                status/assignment
               </p>
             )}
           </div>

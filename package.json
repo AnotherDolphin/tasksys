@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node .",
     "dev": "npx nodemon index.js",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules ENV=test PORT=8281  npx jest --forceExit"
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules ENV=test npx jest --forceExit"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",

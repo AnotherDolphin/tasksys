@@ -67,7 +67,6 @@ router.put("/:id/assign", async (req, res) => {
   }
 });
 
-// get changes history
 router.get("/:id/history", async (req, res) => {
   try {
     const { id } = req.params;

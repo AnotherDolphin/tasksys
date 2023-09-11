@@ -13,6 +13,7 @@ export function UserProvider({ children }) {
     JSON.parse(localStorage.getItem("loggedInUser")) || null
   );
 
+
   const getAllUsers = () => {
     fetch("http://localhost:1200/users")
       .then((response) => response.json())
@@ -43,10 +44,10 @@ export function UserProvider({ children }) {
   };
 
   const logout = () => {
+    // window.location.href = "/";4
     setLoggedInUser(null);
     localStorage.removeItem("loggedInUser");
     // return home
-    window.location.href = "/";
   };
 
   useEffect(() => {
