@@ -34,11 +34,21 @@ describe("Task API", () => {
   describe("Reassign Task", () => {
     it("should reassign a task to another user", async () => {
       const res = await request(app).put(`/tasks/${testTask.id}/assign`).send({
-        user: 2,
-        newUser: 3,
+        user: 3,
+        newUser: 2,
       });
       expect(res.statusCode).toEqual(200);
-      expect(res.body.assigned_to).toEqual(3);
+      expect(res.body.assigned_to).toEqual(2);
+    });
+  });
+
+  describe("Try to reassign task to the same user", () => {
+    it("should return 422", async () => {
+      const res = await request(app).put(`/tasks/${testTask.id}/assign`).send({
+        user: 3,
+        newUser: 2,
+      });
+      expect(res.statusCode).toEqual(422);
     });
   });
 
@@ -53,6 +63,23 @@ describe("Task API", () => {
     it("should delete a task", async () => {
       const res = await request(app).delete(`/tasks/${testTask.id}`);
       expect(res.statusCode).toEqual(200);
+    });
+  });
+
+  describe("Try to update task with wrong user", () => {
+    it("should return 401", async () => {
+      const res = await request(app).post("/tasks").send({
+        title: "Test task",
+        description: "Test task very long long description",
+        user: 3,
+      });
+      const task = res.body;
+      const res2 = await request(app).put(`/tasks/${task.id}/status`).send({
+        status: "InProgress",
+        user: 2,
+      });
+      expect(res2.statusCode).toEqual(401);
+      await request(app).delete(`/tasks/${task.id}`);
     });
   });
 });

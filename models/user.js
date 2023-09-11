@@ -9,7 +9,6 @@ class UserStore {
       conn.release();
       return result.rows;
     } catch (err) {
-      console.error(err);
       throw err;
     }
   }
@@ -22,7 +21,6 @@ class UserStore {
       conn.release();
       return result.rows[0];
     } catch (err) {
-      console.error(err);
       throw err;
     }
   }
@@ -45,7 +43,6 @@ class UserStore {
       return insertResult.rows[0];
     } catch (err) {
       await client.query("ROLLBACK");
-      console.error(err);
       throw err;
     }
   }
