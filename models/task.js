@@ -151,6 +151,23 @@ class TaskStore {
     }
   };
 
+  // get changes history and populate rows depending on type of change
+  async getTaskChangesHistory(taskId) {
+    try {
+      const conn = await client.connect();
+      const sql =
+      // "select * from changes where task_id = $1 order by created_at desc";
+        "SELECT changes.id, changes.task_id, changes.user_id, changes.reassignment_id, changes.status_update_id, changes.created_at, reassignments.assigned_by, reassignments.assigned_to, status_updates.from_status, status_updates.to_status FROM changes LEFT JOIN reassignments ON changes.reassignment_id = reassignments.id LEFT JOIN status_updates ON changes.status_update_id = status_updates.id WHERE changes.task_id = $1 ORDER BY changes.created_at DESC";
+      const result = await conn.query(sql, [taskId]);
+      conn.release();
+      return result.rows;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  }
+    
+
   async delete(id) {
     try {
       const conn = await client.connect();

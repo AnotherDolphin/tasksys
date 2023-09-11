@@ -67,4 +67,16 @@ router.put("/:id/assign", async (req, res) => {
   }
 });
 
+// get changes history
+router.get("/:id/history", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const history = await store.getTaskChangesHistory(id);
+    res.send(history);
+  } catch (error) {
+    console.error(error);
+    res.status(error.statusCode?? 422).send(error.detail || error.message);
+  }
+});
+
 export default router;
