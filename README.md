@@ -7,12 +7,11 @@ This is a simple task management system built using Node.js, Express.js, React.j
 
 ### Steps to run server (Node.js)
 
-1. navigate to the server folder using `cd backend`
-2. Install dependencies using `npm install`
-3. Create a postgres database called `tasksys` and update the `db-client.js` file with your username and password
-4. Run the DB commands in `up.pgsql` to create the tables
-5. Start the server using `npm start` or a dev server using `npm run dev`
-6. Run the tests using `npm test`
+1. Install dependencies using `npm install`
+2. Create a postgres database called `tasksys` and update the `db-client.js` file with your username and password
+3. Run the DB commands in `up.pgsql` to create the tables
+4. Start the server using `npm start` or a dev server using `npm run dev`
+5. Run the tests using `npm test`
 
 Find the API documenation in `API.md`
 
